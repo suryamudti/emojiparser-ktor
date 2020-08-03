@@ -9,7 +9,12 @@ class InMemoryRepository : Repository {
     private val phrases = ArrayList<EmojiPhrase>()
 
     override suspend fun add(phrase: EmojiPhrase): EmojiPhrase {
-        TODO("Not yet implemented")
+        if (phrases.contains(phrase)){
+            return phrases.find { it == phrase }!!
+        }
+        phrase.id = idCounter.incrementAndGet()
+        phrases.add(phrase)
+        return phrase
     }
 
     override suspend fun phrase(id: Int): EmojiPhrase? {
