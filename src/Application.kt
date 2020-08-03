@@ -5,12 +5,15 @@ import com.smile.api.phrase
 import com.smile.repository.InMemoryRepository
 import com.smile.webapp.about
 import com.smile.webapp.home
+import com.smile.webapp.phrases
+import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
+import io.ktor.freemarker.FreeMarker
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respondText
@@ -34,11 +37,18 @@ fun Application.module(testing: Boolean = false) {
         moshi()
     }
 
+    install(FreeMarker) {
+        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
+    }
+
     val db = InMemoryRepository()
 
     routing {
         home()
         about()
+        phrases(db)
+
+        // API
         phrase(db)
     }
 }
