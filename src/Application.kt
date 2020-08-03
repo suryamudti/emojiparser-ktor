@@ -2,6 +2,7 @@ package com.smile
 
 import com.ryanharter.ktor.moshi.moshi
 import com.smile.api.phrase
+import com.smile.model.User
 import com.smile.repository.InMemoryRepository
 import com.smile.webapp.about
 import com.smile.webapp.home
@@ -10,6 +11,8 @@ import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.basic
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
@@ -39,6 +42,15 @@ fun Application.module(testing: Boolean = false) {
 
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
+    }
+
+    install(Authentication) {
+        basic(name = "auth") {
+            realm = "Ktor Server"
+            validate { credentials ->
+                if (credentials.password == "${credentials.name}123") User(credentials.name) else null
+            }
+        }
     }
 
     val db = InMemoryRepository()
