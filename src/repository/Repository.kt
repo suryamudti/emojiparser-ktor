@@ -9,5 +9,6 @@ interface Repository {
     suspend fun phrases(): List<EmojiPhrase>
     suspend fun remove(phrase: EmojiPhrase)
     suspend fun remove(id: Int): Boolean
+    suspend fun remove(id: String): Boolean
     suspend fun clear()
 }

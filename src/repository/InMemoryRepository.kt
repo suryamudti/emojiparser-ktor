@@ -1,6 +1,7 @@
 package com.smile.repository
 
 import com.smile.model.EmojiPhrase
+import java.lang.IllegalArgumentException
 import java.util.concurrent.atomic.AtomicInteger
 
 class InMemoryRepository : Repository {
@@ -17,28 +18,24 @@ class InMemoryRepository : Repository {
         return phrase
     }
 
-    override suspend fun phrase(id: Int): EmojiPhrase? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun phrase(id: Int) = phrase(id.toString())
 
-    override suspend fun phrase(id: String): EmojiPhrase? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun phrase(id: String) = phrases.find { it.id.toString() == id } ?:
+        throw  IllegalArgumentException("No phrase found for $id")
 
-    override suspend fun phrases(): List<EmojiPhrase> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun phrases() = phrases.toList()
 
     override suspend fun remove(phrase: EmojiPhrase) {
-        TODO("Not yet implemented")
+        if (phrases.contains(phrase).not()) {
+            throw IllegalArgumentException("No phrase found for ${phrase.id}")
+        }
+        phrases.remove(phrase)
     }
 
-    override suspend fun remove(id: Int): Boolean {
-        TODO("Not yet implemented")
-    }
+    override suspend fun remove(id: Int) = phrases.remove(phrase(id))
 
-    override suspend fun clear() {
-        TODO("Not yet implemented")
-    }
+    override suspend fun remove(id: String) = phrases.remove(phrase(id))
+
+    override suspend fun clear() = phrases.clear()
 
 }
