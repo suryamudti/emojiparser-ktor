@@ -19,6 +19,8 @@ import io.ktor.features.StatusPages
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.response.respondText
 import io.ktor.routing.routing
 
@@ -56,6 +58,9 @@ fun Application.module(testing: Boolean = false) {
     val db = InMemoryRepository()
 
     routing {
+        static("/static") {
+            resources("images")
+        }
         home()
         about()
         phrases(db)
