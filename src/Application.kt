@@ -3,7 +3,8 @@ package com.smile
 import com.ryanharter.ktor.moshi.moshi
 import com.smile.api.phrase
 import com.smile.model.User
-import com.smile.repository.InMemoryRepository
+import com.smile.repository.DatabaseFactory
+import com.smile.repository.EmojiPhrasesRepository
 import com.smile.webapp.about
 import com.smile.webapp.home
 import com.smile.webapp.phrases
@@ -61,7 +62,9 @@ fun Application.module(testing: Boolean = false) {
 
     install(Locations)
 
-    val db = InMemoryRepository()
+    DatabaseFactory.init()
+
+    val db = EmojiPhrasesRepository()
 
     routing {
         static("/static") {

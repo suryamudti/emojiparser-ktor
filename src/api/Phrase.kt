@@ -18,7 +18,7 @@ fun Route.phrase(db: Repository) {
     authenticate("auth") {
         post(PHRASE_ENDPOINT) {
             val request = call.receive<Request>()
-            val phrase = db.add(EmojiPhrase(request.emoji, request.phrase))
+            val phrase = db.add(request.emoji, request.emoji)
             call.respond(phrase)
         }
     }

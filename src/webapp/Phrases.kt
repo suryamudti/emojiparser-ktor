@@ -1,6 +1,5 @@
 package com.smile.webapp
 
-import com.smile.model.EmojiPhrase
 import com.smile.model.User
 import com.smile.redirect
 import com.smile.repository.Repository
@@ -13,7 +12,6 @@ import io.ktor.locations.get
 import io.ktor.locations.post
 import io.ktor.request.receiveParameters
 import io.ktor.response.respond
-import io.ktor.response.respondRedirect
 import io.ktor.routing.Route
 
 const val PHRASES = "/phrases"
@@ -40,7 +38,7 @@ fun Route.phrases(db: Repository) {
                 "add" -> {
                     val emoji = params["emoji"] ?: throw IllegalArgumentException("Missing parameter: emoji")
                     val phrase = params["phrase"] ?: throw IllegalArgumentException("Missing parameter: phrase")
-                    db.add(EmojiPhrase(emoji, phrase))
+                    db.add(emoji, phrase)
                 }
             }
             call.redirect(Phrases())
