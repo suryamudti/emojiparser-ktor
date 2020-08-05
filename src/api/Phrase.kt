@@ -14,12 +14,9 @@ import io.ktor.routing.post
 const val PHRASE_ENDPOINT = "$API_VERSION/phrase"
 
 fun Route.phrase(db: Repository) {
-
-    authenticate("auth") {
-        post(PHRASE_ENDPOINT) {
-            val request = call.receive<Request>()
-            val phrase = db.add(request.emoji, request.emoji)
-            call.respond(phrase)
-        }
+    post(PHRASE_ENDPOINT) {
+        val request = call.receive<Request>()
+        val phrase = db.add("", request.emoji, request.emoji)
+        call.respond(phrase)
     }
 }

@@ -5,9 +5,7 @@ import com.smile.api.phrase
 import com.smile.model.User
 import com.smile.repository.DatabaseFactory
 import com.smile.repository.EmojiPhrasesRepository
-import com.smile.webapp.about
-import com.smile.webapp.home
-import com.smile.webapp.phrases
+import com.smile.webapp.*
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCall
@@ -51,16 +49,9 @@ fun Application.module(testing: Boolean = false) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
 
-    install(Authentication) {
-        basic(name = "auth") {
-            realm = "Ktor Server"
-            validate { credentials ->
-                if (credentials.password == "${credentials.name}123") User(credentials.name) else null
-            }
-        }
-    }
-
     install(Locations)
+
+    val hashFunction = { s: String -> hash(s)}
 
     DatabaseFactory.init()
 
@@ -73,6 +64,9 @@ fun Application.module(testing: Boolean = false) {
         home()
         about()
         phrases(db)
+        signIn(db, hashFunction)
+        signOut()
+        signUp(db, hashFunction)
 
         // API
         phrase(db)

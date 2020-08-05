@@ -1,6 +1,7 @@
 package com.smile.repository
 
 import com.smile.model.EmojiPhrases
+import com.smile.model.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,7 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(EmojiPhrases)
+            SchemaUtils.create(Users)
         }
     }
 
